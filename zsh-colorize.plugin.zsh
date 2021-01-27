@@ -154,6 +154,12 @@ if (( $+commands[grc] )); then
     }
   fi
 
+  if (( $+commands[pstree] )); then
+    function pstree() {
+      command grc --colour=auto pstree "$@"
+    }
+  fi
+
   if (( $+commands[traceroute] )); then
     function traceroute() {
       command grc --colour=auto traceroute "$@"
