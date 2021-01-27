@@ -1,4 +1,6 @@
-# Copyright (c) 2020 Brad Thorne
+# -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+
+# Copyright (c) 2021 Brad Thorne
 
 # According to the Zsh Plugin Standard:
 # http://zdharma.org/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
@@ -16,126 +18,150 @@ if [[ ${zsh_loaded_plugins[-1]} != */zsh-colorize && -z ${fpath[(r)${0:h}]} ]] {
 typeset -gA Plugins
 Plugins[ZSH_COLORIZE_DIR]="${0:h}"
 
-#!/usr/bin/env zsh
 
-export LESS_TERMCAP_mb=$'\E[00;32m'
-export LESS_TERMCAP_md=$'\E[00;34m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[00;33m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[00;32m'
-export LESS_TERMCAP_ue=$'\E[0m'
+export LESS="$LESS -R -M"
+
+function ip() {
+  command ip --color=auto "$@"
+}
+
+function grep() {
+  command grep --colour=auto "$@"
+}
+
+function egrep() {
+  command egrep --colour=auto "$@"
+}
+
+function fgrep() {
+  command fgrep --colour=auto "$@"
+}
+
+if (( $+commands[diff-so-fancy] )); then
+  function diff() {
+    command diff "$@" | diff-so-fancy
+  }
+elif  (( $+commands[delta] )); then
+  function diff() {
+    command diff "$@" | delta
+  }
+else
+  function diff() {
+    command diff --color "$@"
+  }
+fi
 
 if (( $+commands[grc] )); then
-  function env(){
-    =grc --colour=auto env "$@"
+  function env() {
+    command grc --colour=auto env "$@"
   }
 
-  function lsblk(){
-    =grc --colour=auto lsblk "$@"
+  function lsblk() {
+    command grc --colour=auto lsblk "$@"
   }
 
-  function df(){
-    =grc --colour=auto df -h "$@"
+  function df() {
+    command grc --colour=auto df -h "$@"
   }
 
-  function du(){
-    =grc --colour=auto du -h "$@"
+  function du() {
+    command grc --colour=auto du -h "$@"
   }
 
-  function free(){
-    =grc --colour=auto free -h "$@"
+  function free() {
+    command grc --colour=auto free -h "$@"
   }
 
-  function as(){
-    =grc --colour=auto as "$@"
-  }
-
-  function diff(){
-    =grc --colour=auto diff --color "$@"
+  function as() {
+    command grc --colour=auto as "$@"
   }
 
   if (( $+commands[dig] )); then
-    function dig(){
-      =grc --colour=auto dig "$@"
+    function dig() {
+      command grc --colour=auto dig "$@"
     }
   fi
 
   if (( $+commands[gas] )); then
-    function gas(){
-      =grc --colour=auto gas "$@"
+    function gas() {
+      command grc --colour=auto gas "$@"
     }
   fi
 
   if (( $+commands[gcc] )); then
-    function gcc(){
-      =grc --colour=auto gcc "$@"
+    function gcc() {
+      command grc --colour=auto gcc "$@"
     }
   fi
 
   if (( $+commands[g++] )); then
-    function g++(){
-      =grc --colour=auto g++ "$@"
+    function g() ++(){
+      command grc --colour=auto g++ "$@"
     }
   fi
 
   if (( $+commands[last] )); then
-    function last(){
-      =grc --colour=auto last "$@"
+    function last() {
+      command grc --colour=auto last "$@"
     }
   fi
 
   if (( $+commands[ld] )); then
-    function ld(){
-      =grc --colour=auto ld "$@"
+    function ld() {
+      command grc --colour=auto ld "$@"
     }
   fi
 
   if (( $+commands[ifconfig] )); then
-    function ifconfig(){
-      =grc --colour=auto ifconfig "$@"
+    function ifconfig() {
+      command grc --colour=auto ifconfig "$@"
     }
   fi
 
   if (( $+commands[mount] )); then
-    function mount(){
-      =grc --colour=auto mount "$@"
+    function mount() {
+      command grc --colour=auto mount "$@"
     }
   fi
 
   if (( $+commands[mtr] )); then
-    function mtr(){
-      =grc --colour=auto mtr "$@"
+    function mtr() {
+      command grc --colour=auto mtr "$@"
     }
   fi
 
   if (( $+commands[netstat] )); then
-    function netstat(){
-      =grc --colour=auto netstat "$@"
+    function netstat() {
+      command grc --colour=auto netstat "$@"
     }
   fi
 
   if (( $+commands[ping] )); then
-    function ping(){
-      =grc --colour=auto ping "$@"
+    function ping() {
+      command grc --colour=auto ping "$@"
     }
   fi
 
   if (( $+commands[ping6] )); then
-    function ping6(){
-      =grc --colour=auto ping6 "$@"
+    function ping6() {
+      command grc --colour=auto ping6 "$@"
     }
   fi
 
   if (( $+commands[ps] )); then
-    function ps(){
-      =grc --colour=auto ps "$@"
+    function ps() {
+      command grc --colour=auto ps "$@"
     }
   fi
 
   if (( $+commands[traceroute] )); then
-    function traceroute(){
-      =grc --colour=auto traceroute "$@"
+    function traceroute() {
+      command grc --colour=auto traceroute "$@"
     }
   fi
 fi
+
+# Use alternate vim marks [[[ and ]]] as the original ones can
+# confuse nested substitutions, e.g.: ${${${VAR}}}
+
+# vim:ft=zsh:tw=80:sw=4:sts=4:et:foldmarker=[[[,]]]
